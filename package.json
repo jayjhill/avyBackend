@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/jayjhill/avyBackend#readme",
   "dependencies": {
+    "jsdom": "^16.4.0",
     "xvfb": "^0.4.0"
   }
 }
