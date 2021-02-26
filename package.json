@@ -1,0 +1,19 @@
+{
+  "name": "avybackend",
+  "version": "1.0.0",
+  "description": "backend script ot  grab daily rose image",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jayjhill/avyBackend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jayjhill/avyBackend/issues"
+  },
+  "homepage": "https://github.com/jayjhill/avyBackend#readme"
+}
