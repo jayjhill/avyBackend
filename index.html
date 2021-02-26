@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>Intro to SceneLayer | Sample | ArcGIS API for JavaScript 4.18</title>
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+			.color-cell {
+				color: white;
+			}
+
+    </style>
+
+    <link rel="stylesheet" href="https://js.arcgis.com/4.18/esri/themes/light/main.css" />
+    <script src="https://js.arcgis.com/4.18/"></script>
+
+    <script>
+      require(["esri/Map", "esri/views/SceneView", "esri/layers/SceneLayer"], function(Map, SceneView, SceneLayer) {
+        // Create Map
+        var map = new Map({
+          basemap: "topo-vector",
+          ground: "world-elevation"
+        });
+
+        // Create the SceneView
+        var view = new SceneView({
+          container: "viewDiv",
+          map: map,
+          camera: {
+            position: [-111.70, 40.313, 30700],
+            tilt: 51,
+            heading: 0
+          }
+        });
+
+        // Create SceneLayer and add to the map
+        // var sceneLayer = new SceneLayer({
+        //   portalItem: {
+        //     id: "2e0761b9a4274b8db52c4bf34356911e"
+        //   },
+        //   popupEnabled: false
+        // });
+        // map.add(sceneLayer);
+
+        // Create MeshSymbol3D for symbolizing SceneLayer
+        var symbol = {
+          type: "mesh-3d", // autocasts as new MeshSymbol3D()
+          symbolLayers: [
+            {
+              type: "fill", // autocasts as new FillSymbol3DLayer()
+              // If the value of material is not assigned, the default color will be grey
+              material: {
+                color: [244, 247, 134]
+              }
+            }
+          ]
+        };
+        // Add the renderer to sceneLayer
+        // sceneLayer.renderer = {
+        //   type: "simple", // autocasts as new SimpleRenderer()
+        //   symbol: symbol
+        // };
+
+
+// Get the CanvasPixelArray from the given coordinates and dimensions.
+// var imgd = ImageData.data[((50 * (ImageData.width * 4)) + (200 * 4)) + 2];
+// console.log(imgd);
+// var pix = imgd.data;
+
+
+var img = new Image();
+//img.crossOrigin = 'anonymous';
+img.src = './images/code.png';
+var canvas = document.getElementById('canvas');
+var ctx = canvas.getContext('2d');
+img.onload = function() {
+  ctx.drawImage(img, 0, 0);
+  img.style.display = 'none';
+};
+var hoveredColor = document.getElementById('hovered-color');
+var selectedColor = document.getElementById('selected-color');
+
+
+function pick(event, destination) {
+  var x = event.layerX;
+  var y = event.layerY;
+  var pixel = ctx.getImageData(x, y, 1, 1);
+  var data = pixel.data;
+
+
+	const rgba = `rgba(${data[0]}, ${data[1]}, ${data[2]}, ${data[3] / 255})`;
+    const comboText = "X: " + x + ", Y: " + y + ", " + "rgb: " + rgba;
+	destination.style.background = rgba;
+	destination.textContent = rgba;
+
+	return rgba;
+}
+
+avyGrid = [];
+
+
+
+function pickArray(event, destination) {
+  var x = event.layerX;
+  var y = event.layerY;
+  var pixel = ctx.getImageData(x, y, 1, 1);
+  console.log(x);
+  console.log(y);
+  var data = pixel.data;
+  console.log(data);
+
+
+	const rgba = `rgba(${data[0]}, ${data[1]}, ${data[2]}, ${data[3] / 255})`;
+    const comboText = "X: " + x + ", Y: " + y + ", " + "rgb: " + rgba;
+    console.log(comboText);
+	destination.style.background = rgba;
+	destination.textContent = rgba;
+    avyGrid.push(comboText);
+	return rgba;
+}
+
+canvas.addEventListener('mousemove', function(event) {
+	pick(event, hoveredColor);
+});
+canvas.addEventListener('click', function(event) {
+	pickArray(event, selectedColor);
+    console.log(avyGrid);
+    poop = JSON.stringify(avyGrid);
+    console.log(poop);
+});
+    
+
+
+
+
+
+
+
+      });
+    </script>
+  </head>
+
+  <body>
+    <div id="viewDiv">
+        <table>
+            <thead>
+                <tr>
+                    <th>Source</th>
+                    <th width="150">Hovered color</th>
+                    <th width="150">Selected color</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <canvas id="canvas" width="400" height="400"></canvas>
+                    </td>
+                    <td align="center" class="color-cell" id="hovered-color"></td>
+                    <td align="center" class="color-cell" id="selected-color"></td>
+                </tr>
+            </tbody>
+        <table>
+        
+      
+    </canvas></div>
+  </body>
+</html>
