@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/jayjhill/avyBackend/issues"
   },
-  "homepage": "https://github.com/jayjhill/avyBackend#readme"
+  "homepage": "https://github.com/jayjhill/avyBackend#readme",
+  "dependencies": {
+    "xvfb": "^0.4.0"
+  }
 }
