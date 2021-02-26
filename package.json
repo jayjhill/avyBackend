@@ -18,6 +18,7 @@
   "homepage": "https://github.com/jayjhill/avyBackend#readme",
   "dependencies": {
     "jsdom": "^16.4.0",
+    "nightmare": "^3.0.2",
     "node-fetch": "^2.6.1",
     "xvfb": "^0.4.0"
   }
