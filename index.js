@@ -57,9 +57,7 @@ nightmare
         const $ = cheerio.load(html);
         var title = $('.full-width.compass-width.sm-pb3')
         let baseUrl = "https://utahavalanchecenter.org"
-        let urlImg = baseUrl + title.attr('src');
-        let report = urlImg;
-        console.log(report);
+        let report = baseUrl + title.attr('src');
     return report;
     }
 
