@@ -1,5 +1,9 @@
+'use strict'
 const Nightmare = require('nightmare');
 const cheerio = require('cheerio');
+const Fs = require('fs')  
+const Path = require('path')  
+const Axios = require('axios')
 
 const Xvfb = require('xvfb');
 let xvfb = new Xvfb();
@@ -11,7 +15,7 @@ catch (e) {
   console.log(e);
 }
 
-const nightmare = Nightmare({ show: true })
+const nightmare = Nightmare({ show: false })
 const url = 'https://utahavalanchecenter.org/forecast/salt-lake';
 
 nightmare
@@ -19,9 +23,30 @@ nightmare
     .wait('body')
     .evaluate(() => document.querySelector('body').innerHTML)
     .end()
-    .then(response => {
-        console.log("poop1");
-        console.log(getData("response" + response));
+    .then(respons => {
+        console.log(getData(respons));
+        async function downloadImage () {  
+          const url = getData(respons);
+          const path = Path.resolve(__dirname, 'images', 'avy' + yyyymmdd() + '.png')
+          const writer = Fs.createWriteStream(path)
+        
+          const response = await Axios({
+            url,
+            method: 'GET',
+            responseType: 'stream'
+          })
+        
+          response.data.pipe(writer)
+        
+          return new Promise((resolve, reject) => {
+            writer.on('finish', resolve)
+            writer.on('error', reject)
+          })
+        }
+        
+        downloadImage() 
+        
+
 
     }).catch(err=> {
         console.log(err);
@@ -29,19 +54,13 @@ nightmare
 
 
     let getData = html => {
-        console.log("poop");
-        data = [];
         const $ = cheerio.load(html);
-        //var title = $('.text_03.pt2');
-        var title = $('.full-width compass-width sm-pb3')
-        console.log(title.text());
-        report = title.text();
-
-        let url = report.match(/ (?:^|\W*)(low)(?:$|\W*)/gi);
-
-
-
-        return report;
+        var title = $('.full-width.compass-width.sm-pb3')
+        let baseUrl = "https://utahavalanchecenter.org"
+        let urlImg = baseUrl + title.attr('src');
+        let report = urlImg;
+        console.log(report);
+    return report;
     }
 
 
@@ -55,41 +74,12 @@ function yyyymmdd() {
     return '' + y + mm + dd;
 }
 
-function yyyymm() {
-    var now = new Date();
-    var y = now.getFullYear();
-    var m = now.getMonth() + 1;
-    var mm = m < 10 ? '0' + m : m;
-    return '' + y + mm;
-}
-
-const urlImg = "https://utahavalanchecenter.org/sites/default/files/forecast/" + yyyymm() + "/" + yyyymmdd() + "-071704-6.png";
-console.log(urlImg);
 
 
-'use strict'
+ 
 
-const Fs = require('fs')  
-const Path = require('path')  
-const Axios = require('axios')
 
-async function downloadImage () {  
-  const url = urlImg
-  const path = Path.resolve(__dirname, 'images', 'avy' + yyyymmdd() + '.png')
-  const writer = Fs.createWriteStream(path)
 
-  const response = await Axios({
-    url,
-    method: 'GET',
-    responseType: 'stream'
-  })
 
-  response.data.pipe(writer)
 
-  return new Promise((resolve, reject) => {
-    writer.on('finish', resolve)
-    writer.on('error', reject)
-  })
-}
 
-downloadImage()  
