@@ -28,6 +28,7 @@ nightmare
         async function downloadImage () {  
           const url = getData(respons);
           const path = Path.resolve(__dirname, 'images', 'avy' + yyyymmdd() + '.png')
+          console.log(__dirname);
           const writer = Fs.createWriteStream(path)
         
           const response = await Axios({
